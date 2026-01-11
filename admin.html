@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="image/logo.png">
+  <title>おまちゅり | 管理画面</title>
+
+  <link rel="stylesheet" href="css/admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>.hidden { display: none; }</style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="title">
+        <img src="image/logo.png" alt="FMSロゴ" class="logo">
+        <h1>管理画面</h1>
+      </div>
+    </header>
+
+    <main>
+        <!-- 初回PW変更モーダル -->
+    <div id="pwModal" class="modal-backdrop hidden" aria-hidden="true">
+    <div class="pw-modal">
+        <h2>初回パスワード変更</h2>
+        <p>初期パスワードのままだと操作できません。新しいパスワードを設定してください。</p>
+
+        <label>
+        新しいパスワード
+        <input id="newPw1" type="password" autocomplete="new-password" />
+        </label>
+
+        <label>
+        もう一度
+        <input id="newPw2" type="password" autocomplete="new-password" />
+        </label>
+
+        <div class="row">
+        <button id="pwSaveBtn">変更する</button>
+        <button id="pwLogoutBtn" class="sub">ログイン画面へ戻る</button>
+        </div>
+
+        <p id="pwErr" class="err"></p>
+    </div>
+    </div>
+
+      <!-- タブバー -->
+      <div class="tab-bar">
+        <button class="tab-btn active" data-target="noticeTab">お知らせ</button>
+        <button class="tab-btn" data-target="scheduleTab">スケジュール</button>
+        <button class="tab-btn" data-target="shiftTab">シフト</button>
+        <button class="tab-btn" data-target="productTab">在庫</button>
+        <button class="tab-btn" data-target="salesTab">売上</button>
+        <button class="tab-btn" data-target="qrTab">QR発行</button>
+      </div>
+
+      <!-- お知らせ -->
+      <section id="noticeTab" class="tab-content active">
+        <p>全体に共有しておきたい内容を追加・編集・削除</p>
+        <h2>お知らせ追加</h2>
+        <textarea id="noticeText" rows="3" placeholder="お知らせ内容を入力..."></textarea>
+        <button id="addNotice">追加</button>
+        <h3>登録済みお知らせ</h3>
+        <ul id="noticeList"></ul>
+      </section>
+
+      <!-- スケジュール -->
+      <section id="scheduleTab" class="tab-content">
+        <h2>スケジュール追加</h2>
+        <input type="date" id="scheduleDate" />
+        <input type="text" id="scheduleDetail" placeholder="内容を入力..." />
+        <button id="addSchedule">追加</button>
+        <h3>登録済みスケジュール</h3>
+        <ul id="scheduleList"></ul>
+      </section>
+
+      <!-- シフト -->
+      <section id="shiftTab" class="tab-content">
+        <h2>シフト編集</h2>
+        <div class="shift-control-buttons">
+          <button id="addRow">行追加</button>
+          <button id="addColumn">列追加</button>
+          <button id="deleteRow">行削除</button>
+          <button id="deleteColumn">列削除</button>
+        </div>
+        <div id="shiftTableContainer">
+          <table id="shiftTable"></table>
+        </div>
+        <button id="shiftSaveBtn" disabled>保存</button>
+        <span id="shiftSaveStatus"></span>
+      </section>
+
+      <!-- 在庫 -->
+      <section id="productTab" class="tab-content">
+        <div id="mainContainer">
+          <div class="product-header">
+            <h2>在庫</h2>
+          </div>
+          <div class="product-container" id="productContainer"></div>
+          <nav>
+            <button id="add">＋</button>
+            <button id="remove">ー</button>
+          </nav>
+
+          <div id="eventModal" class="modal">
+            <div class="modal-content">
+              <div id="modalHeader"></div>
+              <div id="modalDate"></div>
+              <nav>
+                <button id="checkoutBtn">確定</button>
+                <button id="editBtn">編集</button>
+                <button id="closeModal">戻る</button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 売上 -->
+      <section id="salesTab" class="tab-content">
+        <div id="mainContainer">
+          <div class="product-header" id="flexcontents">
+            <h2>売上履歴</h2>
+            <h2>売上集計</h2>
+          </div>
+
+          <div id="flexcontents">
+            <div class="sales-container" id="salesContainer"></div>
+
+            <div id="salesModal" class="modal">
+              <div class="modal-content">
+                <div id="SmodalHeader"></div>
+                <div id="SmodalDate"></div>
+                <nav>
+                  <button id="cancelSalesBtn">売上取消</button>
+                  <button id="ScloseModal">戻る</button>
+                </nav>
+              </div>
+            </div>
+
+            <div id="PIE">
+              <canvas id="salesPie"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- QR発行 -->
+        <section id="qrTab" class="tab-content">
+        <h2>QR発行</h2>
+        <p>View / Cash 用のURLとQRコードを発行します（token 付与）。</p>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="genViewQr" style="width:auto;">View用 生成</button>
+            <button id="genCashQr" style="width:auto;">Cash用 生成</button>
+        </div>
+
+        <hr style="border:none; border-top:1px solid #d2bdf7; margin:12px 0;">
+
+        <!-- 共通表示エリア -->
+        <div class="qr-panel">
+            <div class="qr-meta">
+            <span id="qrTypeBadge" class="qr-badge">未生成</span>
+            <span id="qrHint" class="qr-hint">ここにURLとQRが表示されます</span>
+            </div>
+
+            <input id="qrUrl" type="text" readonly placeholder="URLがここに表示される">
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <button id="copyQrUrl" style="width:auto;" disabled>URLコピー</button>
+            <button id="dlQr" style="width:auto;" disabled>QRダウンロード</button>
+            </div>
+
+            <canvas id="qrCanvas"></canvas>
+        </div>
+
+        <p id="qrStatus" style="margin-top:10px;"></p>
+        </section>
+
+
+    </main>
+  </div>
+
+  <!-- タブ切替（今まで無かった/壊れてたならこれが必要） -->
+  <script>
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = document.querySelectorAll(".tab-content");
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.dataset.target;
+        if (!targetId) return;
+
+        tabButtons.forEach(b => b.classList.remove("active"));
+        tabContents.forEach(c => c.classList.remove("active"));
+
+        btn.classList.add("active");
+        document.getElementById(targetId)?.classList.add("active");
+      });
+    });
+  </script>
+
+ <script type="module" src="js/admin.js"></script>
+</body>
+</html>

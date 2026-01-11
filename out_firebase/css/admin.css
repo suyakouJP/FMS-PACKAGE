@@ -1,0 +1,514 @@
+/* =========================
+   admin.css（統合版）
+   - 旧モーダル(.modal)と
+     新モーダル(.modal-backdrop + .pw-modal)を共存
+   ========================= */
+
+/* ===== 全体ベース ===== */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: 'Potta One', sans-serif;
+  background: linear-gradient(180deg, #cde0f7, #d7c6f3);
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+p {
+  text-align: center;
+}
+
+.logo {
+  width: 80px;
+  height: 80px;
+}
+
+main {
+  padding: 20px;
+}
+
+/* ===== コンテナ系（admin.html側の .container を想定） ===== */
+.container,
+.admin-container {
+  width: 95%;
+  max-width: 1100px;
+  background: #ffffffcc;
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(160, 120, 255, 0.2);
+  padding: 20px;
+  margin: 20px 0;
+}
+
+header h1 {
+  text-align: center;
+  color: #5a3fb9;
+  font-size: 1.6em;
+  margin: 0 0 20px;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ===== タブバー ===== */
+.tab-bar {
+  display: flex;
+  justify-content: space-around;
+  background: linear-gradient(180deg, #e8d7ff, #d2bdf7);
+  border-radius: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  color: #4a0072;
+  font-family: 'Potta One';
+  cursor: pointer;
+  transition: .2s;
+}
+
+.tab-btn.active {
+  background: linear-gradient(180deg, #f9f4ff, #e9d5ff);
+  color: #8b3df7;
+  border-radius: 15px 15px 0 0;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, .15);
+}
+
+/* ===== タブ中身 ===== */
+.tab-content {
+  display: none;
+  background: #f3edff;
+  padding: 15px;
+  border-radius: 0 0 15px 15px;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, .1);
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+  display: block;
+  width: 650px;
+  height: auto;
+  min-height: 200px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 見出し ===== */
+h2 {
+  color: #5a3fb9;
+  border-left: 5px solid #b8a2ff;
+  padding-left: 8px;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+/* ===== フォーム ===== */
+textarea,
+input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #c7b5f2;
+  margin: 5px 0 10px 0;
+  font-family: 'Potta One';
+  box-sizing: border-box;
+}
+
+button {
+  background: linear-gradient(135deg, #9b4af5, #7d58f5);
+  color: white;
+  border: none;
+  width: 100%;
+  margin: 6px 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #cbbdf5;
+  font-family: 'Potta One', sans-serif;
+  cursor: pointer;
+  transition: .2s;
+}
+
+button:hover {
+  background: #9a84f3;
+}
+
+/* 小さめボタン用 */
+button.sub {
+  opacity: .85;
+}
+
+/* ===== リスト ===== */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #fff;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 5px solid #b46ff7;
+  font-size: 14px;
+}
+
+li button {
+  width: auto;
+  background: #f86c6c;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+li button:hover {
+  background: #d64c4c;
+}
+
+#noticeList,
+#scheduleList {
+  height: 200px;
+  overflow-y: scroll;
+}
+
+/* ===== シフト ===== */
+#shiftTableContainer {
+  overflow: auto;
+  margin-top: 10px;
+}
+
+#shiftTable {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+}
+
+#shiftTable td,
+#shiftTable th {
+  border: 1px solid #d2bdf7;
+  padding: 0;
+  position: relative;
+}
+
+#shiftTable td input[type=text],
+#shiftTable td input[type=time] {
+  width: 100%;
+  height: 100%;
+  border: none;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.shift-control-buttons {
+  margin: 10px 0;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.shift-control-buttons button {
+  flex: 1;
+}
+
+/* ===== 在庫 ===== */
+.product-container {
+  background: #f3edff;
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.product-table th {
+  background: #e2d5ff;
+  color: #4a0072;
+  padding: 8px 0;
+}
+
+.product-table td {
+  height: 60px;
+  border: 1px solid #ddd;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.product-table td:hover {
+  background: #f3e9ff;
+}
+
+.calendar-table td .event {
+  font-size: 10px;
+  color: #5a2dc7;
+  margin-top: 3px;
+  display: block;
+}
+
+.product-btn {
+  width: 270px;
+  font-size: 13px;
+}
+
+/* ===== 旧モーダル（在庫/売上で使用：#eventModal, #salesModal など） =====
+   こっちは "背景も含めて.modal" の方式
+*/
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+}
+
+#closeModal,
+#checkoutBtn,
+#rmvcheckBtn,
+#editBtn,
+#add,
+#remove {
+  width: auto;
+}
+
+/* ===== バッジ ===== */
+.event-count {
+  display: block;
+  background: #b46ff7;
+  color: white;
+  font-size: 10px;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  text-align: center;
+  line-height: 22px;
+  margin-top: 4px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+/* ===== 売上 ===== */
+.sales-container {
+  width: 200px;
+  height: 400px;
+  overflow-y: scroll;
+}
+
+.sale-btn {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 8px;
+  text-align: left;
+  border-radius: 8px;
+}
+
+.sale-btn.cancelled {
+  background-color: gray;
+}
+
+#PIE {
+  width: 350px;
+}
+
+#flexcontents {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* ===== 表の延命処置 ===== */
+.member-name-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: bold;
+  color: #5b46a1;
+}
+
+.member-name-input:focus {
+  outline: none;
+  background: #f3edff;
+  border-radius: 6px;
+}
+
+/* ===== QR発行（共通表示エリア） ===== */
+.qr-panel {
+  margin-top: 8px;
+  padding: 12px;
+  background: #ffffffaa;
+  border: 1px solid #d2bdf7;
+  border-radius: 14px;
+}
+
+.qr-meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.qr-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: #e2d5ff;
+  color: #4a0072;
+  border: 1px solid #c7b5f2;
+}
+
+.qr-badge.view {
+  background: #e9fff0;
+  border-color: #b7f0c7;
+  color: #1a6b39;
+}
+
+.qr-badge.cash {
+  background: #fff2e6;
+  border-color: #ffd2a8;
+  color: #8a4a14;
+}
+
+.qr-hint {
+  font-size: 12px;
+  color: #4a0072;
+  opacity: .85;
+}
+
+#qrCanvas {
+  display: block;
+  width: 260px;
+  height: 260px;
+  margin: 10px auto 0;
+  background: #fff;
+  border: 1px solid #c7b5f2;
+  border-radius: 12px;
+}
+
+/* ===== 新モーダル（初回PW変更）=====
+   HTMLは:
+   <div id="pwModal" class="modal-backdrop hidden">
+     <div class="pw-modal">...</div>
+   </div>
+*/
+.modal-backdrop.hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* 初回PWモーダルの中身は .pw-modal にして衝突回避 */
+.pw-modal {
+  width: min(520px, 92vw);
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 18px 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .25);
+}
+
+.pw-modal .row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.pw-modal input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+}
+
+.pw-modal .err {
+  color: #c00;
+  min-height: 1.2em;
+  margin-top: 10px;
+}
+
+/* ===== レスポンシブ ===== */
+@media (max-width: 768px) {
+  * {
+    outline: 1px solid red;
+  }
+
+  .tab-content.active {
+    width: 350px;
+    height: 475px;
+  }
+
+  #noticeList,
+  #scheduleList {
+    height: 40%;
+    overflow-y: scroll;
+  }
+
+  #PIE {
+    width: 50%;
+  }
+}

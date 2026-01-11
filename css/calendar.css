@@ -1,0 +1,111 @@
+.calendar-container {
+  background: #f3edff;
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #4a0072;
+}
+
+.calendar-header h2 {
+  font-size: 20px;
+}
+
+.calendar-header button {
+  background: #b46ff7;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.calendar-header button:hover {
+  background: #9650e0;
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.calendar-table th {
+  background: #e2d5ff;
+  color: #4a0072;
+  padding: 8px 0;
+}
+
+.calendar-table td {
+  height: 60px;
+  border: 1px solid #ddd;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.calendar-table td:hover {
+  background: #f3e9ff;
+}
+
+.calendar-table td .event {
+  font-size: 10px;
+  color: #5a2dc7;
+  margin-top: 3px;
+  display: block;
+}
+
+/* モーダル */
+.modal {
+  display: none;
+  position: fixed;
+  top:0; left:0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+}
+#closeModal {
+  display: block;
+  margin-bottom: 15px;
+  background: #b46ff7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+#closeModal:hover {
+  background: #9650e0;
+}
+.event-count {
+  display: block;
+  background: #b46ff7;
+  color: white;
+  font-size: 10px;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  text-align: center;
+  line-height: 22px;
+  margin-top: 4px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+th.day {
+  color: crimson;
+}

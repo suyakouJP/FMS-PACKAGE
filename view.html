@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="icon" href="image/logo.png">
+  <title>おまちゅり | ホーム</title>
+
+  <link rel="stylesheet" href="css/view.css">
+  <link rel="stylesheet" href="css/calendar.css">
+
+  <!-- ホーム：お知らせ＆直近予定 -->
+  <script defer type="module" src="js/view.js"></script>
+  <!-- シフト：閲覧用 -->
+  <script defer type="module" src="js/shift-view.js"></script>
+  <!-- スケジュール：カレンダー -->
+  <script defer type="module" src="js/calendar.js"></script>
+
+  <!-- この1ファイル用：表示切替（遷移しない） -->
+  <style>
+    /* 見た目は壊さず、表示制御だけ追加 */
+    .page { display: none; }
+    .page.active { display: block; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- ======== ヘッダー ======== -->
+    <header>
+      <div class="logo-area">
+        <img src="image/logo.png" alt="FMSロゴ" class="logo">
+        <div class="title">
+          <h1>おまちゅり</h1>
+          <p><span>F</span>estival <span>M</span>anagement <span>S</span>upport</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ======== メイン ======== -->
+    <main>
+
+      <!-- ======== ホーム（test_lay.html相当） ======== -->
+      <section class="page active" id="pageHome">
+
+        <section class="notice">
+          <div class="notice-header">
+            <button class="back-btn">＜</button>
+            <h2>お知らせ</h2>
+          </div>
+          <div class="notice-body"></div>
+        </section>
+
+        <section class="schedule">
+          <h2>直近一週間のスケジュール</h2>
+          <ul></ul>
+
+          <p class="link">
+            <a href="#plan" data-page="pagePlan">▶ 全体のスケジュールを確認</a>
+          </p>
+        </section>
+
+      </section>
+
+      <!-- ======== シフト ======== -->
+      <section class="page" id="pageShift">
+        <section class="schedule">
+          <h2>シフト確認</h2>
+          <div id="shiftArea">読み込み中...</div>
+        </section>
+      </section>
+
+      <!-- ======== スケジュール（カレンダー） ======== -->
+      <section class="page" id="pagePlan">
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <button id="prevMonth">◀</button>
+            <h2 id="monthYear"></h2>
+            <button id="nextMonth">▶</button>
+          </div>
+
+          <table class="calendar-table">
+            <thead>
+              <tr>
+                <th class="day">日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th class="day">土</th>
+              </tr>
+            </thead>
+            <tbody id="calendarBody"></tbody>
+          </table>
+        </div>
+
+        <div id="eventModal" class="modal">
+          <div class="modal-content">
+            <button id="closeModal">戻る</button>
+            <h3 id="modalDate"></h3>
+            <ul id="modalEventList"></ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ======== フッターナビ ======== -->
+    <footer>
+      <nav>
+        <!-- hrefは残して見た目そのまま。JSで遷移を止める -->
+        <a href="#home" class="active" data-page="pageHome">ホーム</a>
+        <a href="#shift" data-page="pageShift">シフト確認</a>
+        <a href="#plan" data-page="pagePlan">スケジュール</a>
+      </nav>
+    </footer>
+
+  </div>
+
+  <!-- ======== 画面切替JS ======== -->
+  <script>
+    const pages = document.querySelectorAll(".page");
+    const navLinks = document.querySelectorAll("footer nav a");
+    const switchLinks = document.querySelectorAll("[data-page]");
+
+    function showPage(pageId) {
+      pages.forEach(p => p.classList.toggle("active", p.id === pageId));
+      navLinks.forEach(a => a.classList.toggle("active", a.dataset.page === pageId));
+    }
+
+    // フッター nav と「▶ 全体のスケジュールを確認」などを同じ仕組みで処理
+    switchLinks.forEach(a => {
+      a.addEventListener("click", (e) => {
+        const pageId = a.dataset.page;
+        if (!pageId) return;
+        e.preventDefault();           // ページ遷移しない
+        showPage(pageId);
+      });
+    });
+
+    // URLの # から復元（リロードしても同じ画面）
+    const hash = location.hash.replace("#", "");
+    if (hash === "shift") showPage("pageShift");
+    else if (hash === "plan") showPage("pagePlan");
+    else showPage("pageHome");
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+@import url('https://fonts.googleapis.com/css2?family=Potta+One&display=swap');
+
+body {
+  font-family: 'Potta One';
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+/* ======== 全体設定 ======== */
+body {
+    background: linear-gradient(180deg, #cde0f7, #d7c6f3);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  /* スマホ型コンテナ */
+  .container {
+    width: 100%;
+    max-width: 390px;
+    min-height: 700px;
+    background: #fefefe;
+    border-radius: 25px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  /* ======== ヘッダー ======== */
+  header {
+    background: #ffffffaa;
+    text-align: center;
+    padding: 15px 10px;
+    border-bottom: 2px solid #e0c5f7;
+    height: 52px;
+  }
+  
+  .logo-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .logo {
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    left: 20px;
+  }
+  
+  .title h1 {
+    font-size: 24px;
+    margin: 0;
+    color: #4a0072;
+  }
+  
+  .title p {
+    font-size: 12px;
+    margin: 0;
+    letter-spacing: 0.5px;
+    color: #6e4ba3;
+  }
+  
+  .title span {
+    font-weight: bold;
+    color: #b46ff7;
+  }
+  
+  /* ======== メイン ======== */
+  main {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+  }
+  
+  /* お知らせ */
+  .notice {
+    background: #f3edff;
+    border-radius: 15px;
+    padding: 12px;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .notice-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .notice-header h2 {
+    flex: 1;
+    text-align: center;
+    font-size: 20px;
+    margin: 0;
+    color: #5c429b;
+  }
+  
+  .back-btn {
+    border: none;
+    background: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #5c429b;
+    position: absolute;
+  }
+  
+  .notice-body {
+    height: 120px;
+    overflow-y: auto;
+  }
+  
+  .chat {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .chat img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+  
+  .bubble {
+    background: linear-gradient(135deg, #b46ff7, #7d58f5);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 15px;
+    margin-left: 8px;
+    font-size: 13px;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+    max-width: 70%;
+    line-height: 1.4;
+  }
+  
+  /* スケジュール */
+  .schedule {
+    background: #ece5ff;
+    border-radius: 15px;
+    padding: 12px;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .schedule h2 {
+    text-align: center;
+    margin-top: 0;
+    color: #4e3d8a;
+    font-size: 20px;
+  }
+  
+  .schedule ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  
+  .schedule li {
+    padding: 6px 0;
+    border-bottom: 1px dashed #a897d9;
+    color: #333;
+  }
+  
+  .schedule li span {
+    font-weight: bold;
+    color: #5b46a1;
+  }
+  
+  .schedule .link {
+    text-align: right;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  
+  .schedule .link a {
+    text-decoration: none;
+    color: #5a2dc7;
+    font-weight: bold;
+  }
+  
+  .schedule .link a:hover {
+    text-decoration: underline;
+  }
+  
+  /* ======== フッターナビ ======== */
+  footer {
+    background: #e0c5f7;
+    border-top: 2px solid #bfa7e5;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  nav {
+    display: flex;
+    justify-content:space-around;
+    width: 100%;
+  }
+  
+  nav a {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 13px;
+    text-decoration: none;
+    color: #3c2864;
+    font-weight: bold;
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
+    background: linear-gradient(180deg, #e8d7ff, #d2bdf7);
+    transition: all 0.2s ease;
+  }
+  
+  nav a:last-child {
+    border-right: none;
+  }
+  
+  nav a:hover {
+    background: linear-gradient(180deg, #d9bdfd, #cba8f4);
+  }
+  
+  nav a.active {
+    background: linear-gradient(180deg, #f9f4ff, #e9d5ff);
+    color: #5a2dc7;
+    border-top: 3px solid #9b4af5;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* ======== スクロールバー非表示（モバイル風） ======== */
+  .notice-body::-webkit-scrollbar,
+  main::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ======== タブ制御 ======== */
+
+/* タブボタン列 */
+.tab-buttons {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  padding: 10px 15px;
+}
+
+/* タブボタン */
+.tab-btn {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 0;
+  background: linear-gradient(180deg, #e8d7ff, #d2bdf7);
+  color: #3c2864;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tab-btn:hover {
+  background: linear-gradient(180deg, #d9bdfd, #cba8f4);
+}
+
+.tab-btn.active {
+  background: linear-gradient(180deg, #f9f4ff, #e9d5ff);
+  color: #5a2dc7;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* 中身はデフォで非表示、activeだけ表示 */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}

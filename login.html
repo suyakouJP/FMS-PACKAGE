@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="icon" href="image/logo.png">
+    <title>おまちゅり | ログイン</title>
+    <link rel="stylesheet" href="css/view.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="logo-area">
+        <img src="image/logo.png" alt="FMSロゴ" class="logo">
+        <div class="title">
+        <h1>おまちゅり</h1>
+        <p><span>F</span>estival <span>M</span>anagement <span>S</span>upport</p>
+        </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="login-box">
+
+      <select id="classSelect" class="input">
+        <option value="">クラス選択</option>
+        <option value="2G2">2G2</option>
+      </select>
+
+      <!-- user_id 追加 -->
+      <input type="text" placeholder="ユーザーID" id="userId" class="input">
+
+      <input type="password" placeholder="パスワード" id="password" class="input">
+
+      <button id="loginBtn" class="btn">ログインする</button>
+
+      <p class="create-class-btn" id="openModal">クラス作成</p>
+
+    </div>
+  </main>
+</div>
+
+<!-- クラス作成モーダル -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+
+    <h2>クラス作成</h2>
+
+    <input type="text" id="newClassId" placeholder="クラスID" class="input">
+    <input type="password" id="newClassPw" placeholder="初期パスワード" class="input">
+
+    <input 
+      type="number" 
+      id="iinCount" 
+      class="input"
+      placeholder="委員数（1〜10）"
+      min="1"
+      max="10"
+    >
+
+    <button id="createBtn" class="btn">登録</button>
+    <button id="closeModal" class="close btn">閉じる</button>
+
+  </div>
+</div>
+
+<script type="module" src="js/login.js"></script>
+</body>
+</html>
