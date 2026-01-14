@@ -29,7 +29,13 @@ select, input {
     font-size: 16px;
     cursor: pointer;
 }
-
+#closeModal {
+    background: #93a1ff;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
 .create-class-btn {
     margin-top: 5px;
     font-size: 12px;
@@ -38,7 +44,6 @@ select, input {
     text-decoration: underline;
 }
 
-/* ==== モーダル ==== */
 /* ==== モーダル ==== */
 .modal {
     display: none;
@@ -82,4 +87,13 @@ select, input {
 @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.95); }
     to   { opacity: 1; transform: scale(1); }
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+    margin-left: 20px;
+    width: 90%;
 }
