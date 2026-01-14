@@ -61,6 +61,19 @@
   display: block;
 }
 
+button{
+  background: linear-gradient(135deg, #9b4af5, #7d58f5);
+  color: white;
+  border: none;
+  margin: 6px 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #cbbdf5;
+  font-family: 'Potta One', sans-serif;
+  cursor: pointer;
+  transition: .2s;
+}
+
 /* モーダル */
 .modal {
   display: none;
