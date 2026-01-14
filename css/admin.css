@@ -179,6 +179,7 @@ button {
   font-family: 'Potta One', sans-serif;
   cursor: pointer;
   transition: .2s;
+  text-align: center;
 }
 
 button:hover {
@@ -325,11 +326,36 @@ li button:hover {
   font-size: 13px;
 }
 
-nav {
+/* 在庫タブ上の操作バー */
+.modal-content nav {
   display: flex;
-  justify-content: space-around;
+  flex-direction: row !important;   /* ← スマホCSSを殺す */
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
   width: 100%;
+  margin-top: 12px;
 }
+
+
+.modal-content nav button {
+  width: auto !important;            /* ← width:100% を殺す */
+  min-width: 90px;                   /* ← 小さすぎ防止 */
+  padding: 10px 16px;                /* ← 指対応 */
+  margin: 0 !important;
+  flex: 0 0 auto;
+  font-size: 14px;
+}
+
+/* ===== 在庫タブ：商品追加ボタンを主役に ===== */
+#productTab nav #add {
+  width: 100%;
+  
+  margin: 8px auto 14px;    /* 中央配置 */
+  display: block;
+
+}
+
 
 
 /* =========================
@@ -646,4 +672,53 @@ nav {
     height: auto;
     aspect-ratio: 1 / 1;
   }
+}
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+  }
+  nav button {
+    width: 100%;
+  }
+}
+
+section p {
+  font-size: 12px;
+  height:fit-content
+} 
+
+
+
+
+/* ヘッダータイトル行を中央で整える */
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;   /* ← 全体を中央寄せ */
+  gap: 12px;
+  position: relative;       /* ← ボタンを逃がすため */
+}
+
+/* タイトル文字 */
+.title h1 {
+  margin: 0;
+  text-align: center;
+}
+
+/* ロゴ */
+.title .logo {
+  width: 60px;
+  height: 60px;
+}
+
+/* 「ログインに戻る」ボタンは右上寄りに配置 */
+.title button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  padding: 6px 12px;
+  font-size: 12px;
+  opacity: 0.85;
 }

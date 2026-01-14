@@ -80,7 +80,7 @@ export function initShiftAdmin(classId) {
     const { cols } = ensureMinimum(draftRows, draftHeaders);
 
     const header = document.createElement("tr");
-    header.innerHTML = `<th>時間</th>`;
+    header.innerHTML = `<th>時間　/　役割</th>`;
 
     for (let i = 0; i < cols; i++) {
       const th = document.createElement("th");

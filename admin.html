@@ -18,6 +18,7 @@
       <div class="title">
         <img src="image/logo.png" alt="FMSロゴ" class="logo">
         <h1>管理画面</h1>
+        <button id="backToLoginBtn">ログインに戻る</button>
       </div>
     </header>
 
@@ -59,26 +60,38 @@
 
       <!-- お知らせ -->
       <section id="noticeTab" class="tab-content active">
-        <p>全体に共有しておきたい内容を追加・編集・削除</p>
+        <p>共有したい内容を追加・編集・削除</p>
         <h2>お知らせ追加</h2>
         <textarea id="noticeText" rows="3" placeholder="お知らせ内容を入力..."></textarea>
+<<<<<<< HEAD
         <button id="addNotice">追加</button>
         <h3>追加済み</h3>
+=======
+        <button id="addNotice">確定</button>
+        <h3>登録済み</h3>
+>>>>>>> fbe229b (fix login flow)
         <ul id="noticeList"></ul>
       </section>
 
       <!-- スケジュール -->
       <section id="scheduleTab" class="tab-content">
+        <p>期間中のスケジュール内容を追加・編集・削除</p>
         <h2>スケジュール追加</h2>
         <input type="date" id="scheduleDate" />
         <input type="text" id="scheduleDetail" placeholder="内容を入力..." />
+<<<<<<< HEAD
         <button id="addSchedule">追加</button>
         <h3>追加済み</h3>
+=======
+        <button id="addSchedule">確定</button>
+        <h3>登録済み</h3>
+>>>>>>> fbe229b (fix login flow)
         <ul id="scheduleList"></ul>
       </section>
 
       <!-- シフト -->
       <section id="shiftTab" class="tab-content">
+        <p>当日のシフトの時間と担当を追加・編集・削除</p>
         <h2>シフト編集</h2>
         <div class="shift-control-buttons">
           <button id="addRow">行追加</button>
@@ -95,18 +108,15 @@
 
       <!-- 在庫 -->
       <section id="productTab" class="tab-content">
+        <p>商品の在庫を追加・編集・削除(レジページに影響します)</p>
         <div id="mainContainer">
           <div class="product-header">
             <h2>在庫</h2>
           </div>
-
-          <div class="product-container" id="productContainer"></div>
-
           <nav>
-            <button id="add">＋</button>
-            <button id="remove">ー</button>
+            <button id="add">商品追加</button>
           </nav>
-
+          <div class="product-container" id="productContainer"></div>
           <div id="eventModal" class="modal">
             <div class="modal-content">
               <div id="modalHeader"></div>
@@ -114,6 +124,7 @@
               <nav>
                 <button id="checkoutBtn">確定</button>
                 <button id="editBtn">編集</button>
+                <button id="deleteBtn">削除</button>
                 <button id="closeModal">戻る</button>
               </nav>
             </div>
@@ -123,6 +134,7 @@
 
       <!-- 売上 -->
       <section id="salesTab" class="tab-content">
+        <p>レジページにて登録された売上を確認できます</p>
         <div class="sales-layout">
           <!-- 左上：見出し -->
           <h2 class="sales-h2 sales-h2-history">売上履歴</h2>
@@ -155,9 +167,8 @@
 
       <!-- QR発行 -->
       <section id="qrTab" class="tab-content">
+        <p>ホーム / レジ 用のURLとQRコードを発行します</p>
         <h2>QR発行</h2>
-        <p>View / Cash 用のURLとQRコードを発行します（token 付与）。</p>
-
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button id="genViewQr" style="width:auto;">View用 生成</button>
           <button id="genCashQr" style="width:auto;">Cash用 生成</button>

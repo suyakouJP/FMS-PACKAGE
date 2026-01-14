@@ -16,22 +16,28 @@ export function initStock(classId, audit) {
   const modalHeader = document.getElementById("modalHeader");
 
   let addMode = false;
-  let removeMode = false;
   let editMode = false;
 
   closeModal?.addEventListener("click", () => (modal.style.display = "none"));
 
   document.getElementById("add")?.addEventListener("click", () => addproductModal());
-  document.getElementById("remove")?.addEventListener("click", () => removeModechenge());
   document.getElementById("editBtn")?.addEventListener("click", () => editProductModal());
   document.getElementById("checkoutBtn")?.addEventListener("click", () => confilmer());
+
+  // ★追加：モーダル内の削除ボタン
+  document.getElementById("deleteBtn")?.addEventListener("click", async () => {
+    if (!selectID) return;
+
+    const ok = confirm("本当に削除しますか？\n※この操作は取り消せません");
+    if (!ok) return;
+
+    await rmvProduct(selectID);
+    modal.style.display = "none";
+  });
 
   function confilmer() {
     if (addMode) {
       addProduct();
-    } else if (removeMode) {
-      rmvProduct(selectID);
-      modal.style.display = "none";
     } else if (editMode) {
       editProduct(selectID);
       editMode = false;
@@ -80,20 +86,18 @@ export function initStock(classId, audit) {
 
     const editBtn = document.getElementById("editBtn");
     const checkoutBtn = document.getElementById("checkoutBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
 
-    if (removeMode) {
-      modalHeader.innerHTML = "<h2>削除確認</h2>";
-      if (editBtn) editBtn.style.display = "none";
-      if (checkoutBtn) checkoutBtn.style.display = "flex";
-    } else {
-      if (editBtn) editBtn.style.display = "flex";
-      if (checkoutBtn) checkoutBtn.style.display = "none";
-    }
+    // 通常表示：編集ボタン＋削除ボタンを出す / 決定ボタンは隠す
+    if (editBtn) editBtn.style.display = "flex";
+    if (deleteBtn) deleteBtn.style.display = "flex";
+    if (checkoutBtn) checkoutBtn.style.display = "none";
   }
 
   function addproductModal() {
     addMode = true;
     editMode = false;
+    selectID = null;
 
     modal.style.display = "flex";
     modalHeader.innerHTML = "<h2>商品追加</h2>";
@@ -107,8 +111,12 @@ export function initStock(classId, audit) {
 
     const checkoutBtn = document.getElementById("checkoutBtn");
     const editBtn = document.getElementById("editBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
+
     if (checkoutBtn) checkoutBtn.style.display = "flex";
     if (editBtn) editBtn.style.display = "none";
+    // 追加中は削除できない（まだ存在しないので）
+    if (deleteBtn) deleteBtn.style.display = "none";
   }
 
   async function addProduct() {
@@ -141,17 +149,6 @@ export function initStock(classId, audit) {
     }
   }
 
-  function removeModechenge() {
-    removeMode = !removeMode;
-    audit?.("PRODUCT_REMOVE_MODE_TOGGLE", { classId, removeMode });
-
-    if (removeMode) {
-      document.body.style.background = "linear-gradient(180deg, #cde0f7,#ff0000 )";
-    } else {
-      document.body.style.background = "linear-gradient(180deg, #cde0f7, #d7c6f3)";
-    }
-  }
-
   async function rmvProduct(id) {
     if (!id) return;
     try {
@@ -168,6 +165,7 @@ export function initStock(classId, audit) {
     editMode = true;
     addMode = false;
 
+    modalHeader.innerHTML = "<h2>商品編集</h2>";
     modalDate.innerHTML = `
       <h3>GAZOU</h3>
       <p>商品名：<input type="text" id="name" placeholder="未入力なら変更しません"></p>
@@ -178,8 +176,12 @@ export function initStock(classId, audit) {
 
     const editBtn = document.getElementById("editBtn");
     const checkoutBtn = document.getElementById("checkoutBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
+
     if (editBtn) editBtn.style.display = "none";
     if (checkoutBtn) checkoutBtn.style.display = "flex";
+    // 編集中も削除はできる（事故りやすいならここで hidden にしてもいい）
+    if (deleteBtn) deleteBtn.style.display = "flex";
 
     audit?.("PRODUCT_EDIT_MODAL", { classId, productId: selectID });
   }

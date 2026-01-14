@@ -285,3 +285,14 @@ document.querySelectorAll(".name").forEach(el => {
     el.classList.add("small");
   }
 });
+
+// ログイン画面に戻る
+document.getElementById("backToLoginBtn")?.addEventListener("click", () => {
+  // 念のためログイン情報を破棄
+  localStorage.removeItem("classId");
+  localStorage.removeItem("userId");
+  localStorage.removeItem("role");
+
+  // ログイン画面へ
+  location.href = "login.html";
+});
