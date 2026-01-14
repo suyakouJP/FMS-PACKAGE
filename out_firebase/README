@@ -1,3 +1,0 @@
-## Security
-- Passwords are hashed using SHA-256 via the Web Crypto API (`crypto.subtle`)
-- This project requires a secure context (HTTPS or localhost) to function correctly

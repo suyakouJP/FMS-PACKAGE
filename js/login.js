@@ -8,9 +8,13 @@ import {
   getDoc,
   setDoc,
   serverTimestamp,
-  writeBatch
+  writeBatch,
+  query,
+  orderBy,
+  limit
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 import { sha256 } from "./crypto.js";
+
 
 document.addEventListener("DOMContentLoaded", () => {
   /* ===========================
@@ -66,9 +70,15 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("クラスIDは英数字・_・- のみ使用できます");
       return;
     }
-
     try {
       console.log("CREATE STEP 1:", { cid, cnt });
+
+      const classRef = doc(db, "Classes", cid);
+      const classSnap = await getDoc(classRef);
+      if (classSnap.exists()) {
+      alert("そのクラスIDは既に存在します（別のIDにしてください）");
+      return;
+    }
 
       await setDoc(doc(db, "Classes", cid), {
         iinCount: cnt,
@@ -92,7 +102,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       alert(`作成完了！ ユーザーIDは user01 ～ user${cnt < 10 ? "0" + cnt : cnt}`);
       if (modal) modal.style.display = "none";
-      loadClassesToSelect();
+
+      // ★作成直後はキャッシュを捨てて必ず再取得
+      localStorage.removeItem("classes_cache_v1");
+      localStorage.removeItem("classes_cache_time_v1");
+
+      await loadClassesToSelect(true);
+      classSelect.value = cid;
+
+
 
     } catch (e) {
       console.error("CREATE FAILED:", e);
@@ -142,22 +160,59 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-/* ===========================
-   クラス一覧取得
-   =========================== */
-async function loadClassesToSelect() {
+//クラス一覧取得
+async function loadClassesToSelect(force = false) {
   const classSelect = document.getElementById("classSelect");
   if (!classSelect) return;
 
   classSelect.innerHTML = `<option value="">クラス選択</option>`;
 
+  const cacheKey = "classes_cache_v1";
+  const cacheTimeKey = "classes_cache_time_v1";
+  const now = Date.now();
+
+  const cached = localStorage.getItem(cacheKey);
+  const cachedTime = Number(localStorage.getItem(cacheTimeKey) || 0);
+
+  if (!force && cached && (now - cachedTime) < 10 * 60 * 1000) {
+    const ids = JSON.parse(cached);
+    const frag = document.createDocumentFragment();
+    for (const id of ids) {
+      const opt = document.createElement("option");
+      opt.value = id;
+      opt.textContent = id;
+      frag.appendChild(opt);
+    }
+    classSelect.appendChild(frag);
+    return;
+  }
+
   try {
-    const qSnap = await getDocs(collection(db, "Classes"));
+    console.time("loadClasses");
+    const q = query(collection(db, "Classes"), orderBy("__name__"), limit(100));
+    const qSnap = await getDocs(q);
+
+    const ids = [];
+    const frag = document.createDocumentFragment();
+
     qSnap.forEach(d => {
-      classSelect.innerHTML += `<option value="${d.id}">${d.id}</option>`;
+      ids.push(d.id);
+      const opt = document.createElement("option");
+      opt.value = d.id;
+      opt.textContent = d.id;
+      frag.appendChild(opt);
     });
+
+    classSelect.appendChild(frag);
+
+    // キャッシュ保存
+    localStorage.setItem(cacheKey, JSON.stringify(ids));
+    localStorage.setItem(cacheTimeKey, String(now));
+
+    console.timeEnd("loadClasses");
   } catch (e) {
     console.error(e);
     alert("クラス一覧が取得できません");
   }
 }
+

@@ -1,7 +1,7 @@
 // js/admin.js
-console.log("pwModal:", document.getElementById("pwModal"));
-console.log("pwSaveBtn:", document.getElementById("pwSaveBtn"));
-console.log("newPw1:", document.getElementById("newPw1"));
+// 管理画面の玄関：ログイン情報チェック → 初回PW変更ゲート → 各機能init
+// ★このファイルは module なので import は最上段に置く
+
 import { initQr } from "./qr.js";
 
 import { db } from "./firebase.js";
@@ -12,6 +12,11 @@ import { doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com
 import { initSale } from "./sale.js";
 import { initStock } from "./stock.js";
 import { initShiftAdmin } from "./shift-admin.js";
+
+// ★admin専用モジュール（DOMContentLoadedで自走する）
+import "./notication-admin.js";
+import "./schedule-admin.js";
+import "./calendar-admin.js";
 
 /* ---------------------------
    audit（console履歴用）
@@ -63,12 +68,14 @@ function dumpAuditLogToConsole() {
    gate（初回PW変更）
 --------------------------- */
 function ensureModalExists() {
+  // admin.html側にあるなら何もしない
   if (document.getElementById("pwModal")) return;
 
+  // 念のため無い場合は差し込む（保険）
   const wrap = document.createElement("div");
   wrap.innerHTML = `
   <div id="pwModal" class="modal-backdrop hidden" aria-hidden="true">
-    <div class="modal">
+    <div class="pw-modal">
       <h2>初回パスワード変更</h2>
       <p>初期パスワードのままだと操作できません。新しいパスワードを設定してください。</p>
 
@@ -93,26 +100,27 @@ function ensureModalExists() {
   `;
   document.body.appendChild(wrap);
 
+  // 最低限の見た目だけ
   const style = document.createElement("style");
   style.textContent = `
     .modal-backdrop.hidden { display:none; }
     .modal-backdrop{
-      position:fixed; inset:0; background:rgba(0,0,0,.55);
+      position:fixed; inset:0; background:rgba(0,0,0,0.55);
       display:flex; align-items:center; justify-content:center;
       z-index:9999;
     }
-    .modal{
+    .pw-modal{
       width:min(520px, 92vw);
       background:#fff;
       border-radius:16px;
       padding:18px 18px 14px;
-      box-shadow:0 12px 40px rgba(0,0,0,.25);
+      box-shadow:0 12px 40px rgba(0,0,0,0.25);
     }
-    .modal label{ display:block; margin-top:10px; }
-    .modal .row{ display:flex; gap:10px; margin-top:12px; }
-    .modal input{ width:100%; padding:10px; margin-top:6px; }
-    .modal .err{ color:#c00; min-height:1.2em; margin-top:10px; }
-    .modal button.sub{ opacity:.85; }
+    .pw-modal label{ display:block; margin-top:10px; }
+    .pw-modal .row{ display:flex; gap:10px; margin-top:12px; }
+    .pw-modal input{ width:100%; padding:10px; margin-top:6px; }
+    .pw-modal .err{ color:#c00; min-height:1.2em; margin-top:10px; }
+    .pw-modal button.sub{ opacity:0.8; }
   `;
   document.head.appendChild(style);
 }
@@ -131,22 +139,28 @@ function hideModal() {
 }
 
 function lockUi() {
+  // body全体を無効化する
   document.body.style.pointerEvents = "none";
+
+  // ただし pwModal だけは生かす
   const m = document.getElementById("pwModal");
   if (m) m.style.pointerEvents = "auto";
 }
+
 function unlockUi() {
   document.body.style.pointerEvents = "";
+
+  const m = document.getElementById("pwModal");
+  if (m) m.style.pointerEvents = "";
 }
+
 
 async function gateMustChangePassword({ classId, userId }) {
   ensureModalExists();
-
   if (!classId || !userId) return false;
 
   const adminRef = doc(db, "Classes", classId, "Admins", userId);
 
-  // ★ここ：存在しない / 読めない を判別して表示
   let snap;
   try {
     snap = await getDoc(adminRef);
@@ -167,7 +181,7 @@ async function gateMustChangePassword({ classId, userId }) {
 
   const data = snap.data();
   if (data.mustChangePassword !== true) {
-    return true;
+    return true; // OK
   }
 
   audit("GATE_REQUIRE_PW_CHANGE", { classId, userId });
@@ -179,16 +193,23 @@ async function gateMustChangePassword({ classId, userId }) {
   const saveBtn = document.getElementById("pwSaveBtn");
   const logoutBtn = document.getElementById("pwLogoutBtn");
 
+  if (!errEl || !saveBtn || !logoutBtn) {
+    console.warn("pw modal dom missing");
+    return false;
+  }
+
   errEl.textContent = "";
   saveBtn.onclick = null;
   logoutBtn.onclick = null;
 
+  // 「ログインへ戻る」
   logoutBtn.onclick = () => {
     audit("PW_CHANGE_ABORT_TO_LOGIN", { classId, userId });
     localStorage.clear();
     location.href = "./login.html";
   };
 
+  // 「変更する」
   saveBtn.onclick = async () => {
     errEl.textContent = "";
     const pw1 = document.getElementById("newPw1")?.value?.trim() ?? "";
@@ -219,13 +240,18 @@ async function gateMustChangePassword({ classId, userId }) {
     }
   };
 
-  return false;
+  return false; // 変更完了まで止める
 }
 
 /* ---------------------------
    entry（ここが玄関）
 --------------------------- */
 document.addEventListener("DOMContentLoaded", async () => {
+  // デバッグログ（必要なら消してOK）
+  console.log("pwModal:", document.getElementById("pwModal"));
+  console.log("pwSaveBtn:", document.getElementById("pwSaveBtn"));
+  console.log("newPw1:", document.getElementById("newPw1"));
+
   dumpAuditLogToConsole();
 
   const classId = localStorage.getItem("classId");
@@ -246,18 +272,32 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   audit("ADMIN_GATE_PASSED", { classId, userId });
 
-    initSale(classId, audit);
-    initStock(classId, audit);
-    initShiftAdmin(classId, audit);
-    initQr(classId);
+  // 各機能起動
+  initSale(classId, audit);
+  initStock(classId, audit);
+  initShiftAdmin(classId, audit);
+  initQr(classId);
 
+  // 文字数に応じてフォントサイズ調整（要素が無いなら何もしない）
+  document.querySelectorAll(".name").forEach(el => {
+    const len = el.textContent.trim().length;
+    if (len >= 12) el.classList.add("xsmall");
+    else if (len >= 8) el.classList.add("small");
+  });
+
+  // ログイン画面に戻る（admin.htmlにボタンがある前提）
+  document.getElementById("backToLoginBtn")?.addEventListener("click", () => {
+    localStorage.removeItem("classId");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("role");
+    location.href = "login.html";
+  });
 });
 
-
+// 任意：監査ログをクラス別にコンソール表示
 function showAuditLogsForCurrentClass(limit = 50) {
   const classId = localStorage.getItem("classId") || "";
   let logs = [];
-
   try {
     logs = JSON.parse(localStorage.getItem("auditLog_v1") || "[]");
   } catch {
@@ -274,25 +314,4 @@ function showAuditLogsForCurrentClass(limit = 50) {
   console.table(filtered);
   console.groupEnd();
 }
-
-// ===== 文字数に応じてフォントサイズ調整 =====
-document.querySelectorAll(".name").forEach(el => {
-  const len = el.textContent.trim().length;
-
-  if (len >= 12) {
-    el.classList.add("xsmall");
-  } else if (len >= 8) {
-    el.classList.add("small");
-  }
-});
-
-// ログイン画面に戻る
-document.getElementById("backToLoginBtn")?.addEventListener("click", () => {
-  // 念のためログイン情報を破棄
-  localStorage.removeItem("classId");
-  localStorage.removeItem("userId");
-  localStorage.removeItem("role");
-
-  // ログイン画面へ
-  location.href = "login.html";
-});
+window.showAuditLogsForCurrentClass = showAuditLogsForCurrentClass;

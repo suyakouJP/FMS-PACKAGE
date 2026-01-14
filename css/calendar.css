@@ -62,7 +62,8 @@
 }
 
 /* モーダル */
-.modal {
+/* view用モーダルだけに限定する */
+#pagePlan .modal {
   display: none;
   position: fixed;
   top:0; left:0;
@@ -70,14 +71,17 @@
   background: rgba(0,0,0,0.5);
   justify-content: center;
   align-items: center;
+  z-index: 3000;
 }
-.modal-content {
+
+#pagePlan .modal-content {
   background: #fff;
   padding: 20px;
   border-radius: 12px;
   max-width: 400px;
   width: 90%;
 }
+
 #closeModal {
   display: block;
   margin-bottom: 15px;
