@@ -57,11 +57,10 @@ export function initStock(classId, audit) {
   function displayProduct(p) {
     const btn = document.createElement("button");
     btn.innerHTML = `
-      <h3>GAZOU</h3>
       <h3>商品名：${p.name ?? ""}</h3>
-      <p>単価：${p.price ?? 0}円</p>
-      <p>原価：${p.cost ?? 0}円</p>
-      <p>在庫数：${p.stock ?? 0}</p>
+      <h4>単価：${p.price ?? 0}円</h4>
+      <h4>原価：${p.cost ?? 0}円</h4>
+      <h4>在庫数：${p.stock ?? 0}</h4>
     `;
     btn.classList.add("product-btn");
 
@@ -78,10 +77,9 @@ export function initStock(classId, audit) {
     modal.style.display = "flex";
     modalHeader.innerHTML = "<h2>内容</h2>";
     modalDate.innerHTML = `
-      <h3>GAZOU</h3>
       <h3>商品名：${p.name ?? ""}</h3>
-      <p>単価：${p.price ?? 0}円</p>
-      <p>在庫数：${p.stock ?? 0}</p>
+      <h3>単価：${p.price ?? 0}円</h3>
+      <h3>在庫数：${p.stock ?? 0}</h3>
     `;
 
     const editBtn = document.getElementById("editBtn");
@@ -102,7 +100,6 @@ export function initStock(classId, audit) {
     modal.style.display = "flex";
     modalHeader.innerHTML = "<h2>商品追加</h2>";
     modalDate.innerHTML = `
-      <h3>GAZOU</h3>
       <p>商品名：<input type="text" id="name" placeholder="商品名を入力してください。"></p>
       <p>単価：<input type="text" id="price" placeholder="商品単価を入力してください。"></p>
       <p>原価：<input type="text" id="cost" placeholder="商品原価を入力してください。"></p>
@@ -167,7 +164,6 @@ export function initStock(classId, audit) {
 
     modalHeader.innerHTML = "<h2>商品編集</h2>";
     modalDate.innerHTML = `
-      <h3>GAZOU</h3>
       <p>商品名：<input type="text" id="name" placeholder="未入力なら変更しません"></p>
       <p>単価：<input type="text" id="price" placeholder="未入力なら変更しません"></p>
       <p>原価：<input type="text" id="cost" placeholder="未入力なら変更しません"></p>
