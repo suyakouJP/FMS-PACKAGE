@@ -57,7 +57,6 @@ export function initStock(classId, audit) {
   function displayProduct(p) {
     const btn = document.createElement("button");
     btn.innerHTML = `
-      <h3>GAZOU</h3>
       <h3>商品名：${p.name ?? ""}</h3>
       <p>単価：${p.price ?? 0}円</p>
       <p>原価：${p.cost ?? 0}円</p>
